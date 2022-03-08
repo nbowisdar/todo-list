@@ -1,30 +1,49 @@
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
+from django.contrib.auth.forms import UserCreationForm
 
 from todo.forms import *
 from django.http import HttpResponse, HttpResponseRedirect
 #from django.urls import
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
-from django.contrib.auth.views import LoginView
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import CreateView, DeleteView, DetailView, CreateView, UpdateView
 from django.views.generic.list import ListView
 from .models import Task
 #from django.views.generic.edit import CreateView, UpdateView
+from django.contrib import messages
 
+def register_request(request):
+	if request.method == "POST":
+		form = UserCreationForm(request.POST)
+		if form.is_valid():
+			user = form.save()
+			login(request, user)
+			messages.success(request, "Registration successful." )
+			return redirect("main:homepage")
+		messages.error(request, "Unsuccessful registration. Invalid information.")
+	form = UserCreationForm()
+	return render (request=request, template_name="todo/reg/register.html", context={"form":form})
 
-def main(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-    return HttpResponse('<h1>You are authenticated!')
+class LoginUser(LoginView):
+    template_name = 'todo/reg/login.html'
+    #success_url = reverse_lazy('tasks')
+    #next_page = ''
 
+def registration(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('tasks')
+    else:
+        form = UserCreationForm()
+        return render(request, 'todo/reg/register.html', {'title':'registration', 'form':form})
 
-# class LoginUser(LoginView):
-#     authentication_form = LoginForm
-#     form_class = User
-#     template_name = 'todo/reg/login.html'
-#     content_object_name = 'form'
+def test_rediretc(request):
+    return redirect('tasks')
 
 def register(request):
     if request.method == 'POST':

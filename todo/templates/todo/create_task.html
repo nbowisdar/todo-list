@@ -1,0 +1,12 @@
+{% extends 'todo/base_template/base.html' %}
+{% block content %}
+
+<h1>Hello, create new task</h1> 
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" name="Hello" id="" value="Hello">
+</form>
+
+{% endblock %}

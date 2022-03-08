@@ -1,0 +1,21 @@
+{% extends 'todo/base_template/base.html' %}
+
+{% block content %}
+
+<h1>Hello now your task is:</h1>
+
+<ul>
+    
+    {% for task in tasks %}
+    <li> <h4> {{ task.title }} 
+        --- <a href='/task/{{ task.pk }}'> &#9711 </a>
+        --- <a href="{% url 'update' task.pk %}"> edit </a>    
+        --- <a href="d/{{ task.pk }}">✖</a> </h4> </li>
+    {% empty %}
+    <li>You have no tasks now</li>
+    {% endfor %}
+</ul>
+
+<h4>Create new <a href="{% url 'create' %}">task</a></h4>
+
+{% endblock %}

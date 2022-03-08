@@ -6,6 +6,8 @@ class TaskForm(ModelForm):
         model = Task
         fields = ['title', 'desc']
 
-class LoginUser(forms.Form):
+class LoginForm(forms.Form):
     username = forms.Field()
     password = forms.Field()
+
+class RegisterForm(forms.Form):

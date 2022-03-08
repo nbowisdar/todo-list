@@ -7,24 +7,28 @@ from django.http import HttpResponse, HttpResponseRedirect
 #from django.urls import
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
+from django.contrib.auth.views import LoginView
+from django.views.generic import CreateView, DeleteView, DetailView, CreateView, UpdateView
 from django.views.generic.list import ListView
 from .models import Task
-from django.views.generic.edit import CreateView, UpdateView
-# Create your views here.
+#from django.views.generic.edit import CreateView, UpdateView
+
 
 def main(request):
     if not request.user.is_authenticated:
         return redirect('login')
     return HttpResponse('<h1>You are authenticated!')
 
-# def first(request):
-#     form = TaskForm()
-#     return render(request, 'todo/test.html', {'form':form})
 
-def login(request):
+# class LoginUser(LoginView):
+#     authentication_form = LoginForm
+#     form_class = User
+#     template_name = 'todo/reg/login.html'
+#     content_object_name = 'form'
+
+def register(request):
     if request.method == 'POST':
-        form = LoginUser(request.POST)
+        form = LoginForm(request.POST)
         if form.is_valid():
             user = authenticate(form.cleaned_data)
             #print(form.cleaned_data['username'])

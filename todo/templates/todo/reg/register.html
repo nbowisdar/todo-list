@@ -1,7 +1,7 @@
 {% extends 'todo/base_template/base.html' %}
 
 {% block content %}
-<h1 style="text-align:center" >Registration</h1>
+<h1 class="cent" >Registration</h1>
 <form action="{% url 'register' %}" method="post">
     {% csrf_token %}
     {{form.as_p}}

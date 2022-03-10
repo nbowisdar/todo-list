@@ -1,7 +1,7 @@
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from todo.forms import *
 from django.http import HttpResponse, HttpResponseRedirect
@@ -23,7 +23,7 @@ class RegisterUser(FormView):
     template_name = 'todo/reg/register.html'
     form_class = UserCreationForm
     success_url = reverse_lazy('tasks')
-    extra_context = 'registration'
+    extra_context = {'title':'registration'}
     redirect_authenticated_user = True
 
     def form_valid(self, form):
@@ -50,7 +50,7 @@ class UpdateTask(UpdateView):
     template_name = 'todo/create_task.html'
     extra_context = {'title':'update-task'}
 
-class ShowList(ListView):
+class ShowList(LoginRequiredMixin ,ListView):
     model = Task
     template_name = 'todo/show_list.html'
     context_object_name = 'tasks'

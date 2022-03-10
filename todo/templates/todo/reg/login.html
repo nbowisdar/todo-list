@@ -1,11 +1,14 @@
 {% extends 'todo/base_template/base.html' %}
 
 {% block content %}
+<div class="cent">
 <h1>Login</h1>
-<form action="" method="post">
+<form action="" method="post" >
     {% csrf_token %}
-    {{form.as_p}}
+    <p style="color: red;" >{{ form.error }}</p>
+    <p>{{ form.username.label_tag }} {{form.username}}</p>
+    <p>{{ form.password.label_tag }} {{ form.password }}</p>
     <input type="submit" value="login">
 </form>
-
+</div>
 {% endblock %}

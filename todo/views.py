@@ -1,8 +1,8 @@
-from django.contrib.auth.views import LoginView
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.core.mail import send_mail
 from todo.forms import *
 from django.http import HttpResponse, HttpResponseRedirect
 #from django.urls import
@@ -80,3 +80,28 @@ class DeleteTask(DeleteView):
     success_url = reverse_lazy('tasks')
     def get(self, request, *args, **kwargs):
         return super(DeleteTask, self).delete(request, *args, **kwargs)
+
+from todo_project.settings import EMAIL_HOST_USER
+def mail(request):
+    subject = 'Test subject'
+    message = 'Message witch will be send'
+    email_from = EMAIL_HOST_USER
+    email_receive = ['380992566619v@gmail.com']
+
+    send_mail(subject, message, email_from, email_receive)
+    #return redirect('tasks')
+
+def forget_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        rez = User.objects.filter(email=email)
+        if len(rez) != 0:
+            subject = 'Reset password'
+            message = 'In this message will be secret code!'
+            email_from = EMAIL_HOST_USER
+            email_receive = [email]
+            send_mail(subject, message, email_from, email_receive)
+            messages.success(request, 'message was send, check your email!')
+        else:
+            messages.error(request, 'This email is wrong')
+    return render(request, template_name='todo/reg/forget_password.html')

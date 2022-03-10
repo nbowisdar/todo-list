@@ -14,5 +14,7 @@ urlpatterns = [
     path('login/', views.LoginUser.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(template_name='todo/reg/logout.html'), name='logout'),
     path('registration/', views.RegisterUser.as_view(), name='register'),
-    path('info', views.show_info)
+    path('info/', views.show_info),
+    path('send-mail/', views.mail),
+    path('forget-password/', views.forget_password)
 ]

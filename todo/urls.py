@@ -16,5 +16,7 @@ urlpatterns = [
     path('registration/', views.RegisterUser.as_view(), name='register'),
     path('info/', views.show_info),
     path('send-mail/', views.mail),
-    path('forget-password/', views.forget_password, name='f-password')
+    path('forget-password/', views.forget_password, name='f-password'),
+    path('check_code/', views.check_password, name='check'),
+    path('change_password/', views.change_password, name='change_password')
 ]

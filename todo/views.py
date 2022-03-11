@@ -1,17 +1,17 @@
-from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+import random
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from todo.forms import *
 from django.http import HttpResponse, HttpResponseRedirect
-#from django.urls import
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import FormView, DeleteView, DetailView, CreateView, UpdateView
 from django.views.generic.list import ListView
-from .models import Task
+from .models import *
 from django.contrib import messages
 
 class LoginUser(LoginView):
@@ -90,18 +90,50 @@ def mail(request):
 
     send_mail(subject, message, email_from, email_receive)
     #return redirect('tasks')
-
+global code
 def forget_password(request):
     if request.method == 'POST':
+        code = create_code()
         email = request.POST.get('email')
         rez = User.objects.filter(email=email)
+
         if len(rez) != 0:
             subject = 'Reset password'
-            message = 'In this message will be secret code!'
+            message = f'Hello this is your password! - {code}'
             email_from = EMAIL_HOST_USER
             email_receive = [email]
             send_mail(subject, message, email_from, email_receive)
-            messages.success(request, 'message was send, check your email!')
+            messages.success(request, 'message was send, check your email!'
+                                      f'your code is {request.session["code"]}')
+
+            #create code in database
+            user = rez[0]
+            Reset_password_code(code=code, user=user).save()
+
+            return redirect('check')
         else:
             messages.error(request, 'This email is wrong')
     return render(request, template_name='todo/reg/forget_password.html')
+
+def check_password(request):
+    if request.method == 'POST':
+
+        code = request.POST.get('code')
+        if Reset_password_code.objects.filter(code=code):
+
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Your code is wrong')
+    return render(request, 'todo/reg/check_code.html', )
+
+def change_password(request):
+    return HttpResponse('Here you will change your password')
+
+
+
+
+def create_code():
+    return random.randint(1000, 9999)
+def check_code(code1, code2):
+    return True if code1 == code2 else False
+

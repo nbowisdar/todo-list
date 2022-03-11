@@ -1,11 +1,22 @@
 {% include 'todo/base_template/header.html' %}
 
+
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <p class="message {{ message.tags }}">{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
 <div class="center">
     {% if not user.is_authenticated %}
     <p style="text-align: right;"> <a href="{% url 'login' %}">login</a> / <a href="{% url 'register' %}">registration</a> </p>
     {% else %}
     <p style="text-align: right;"> {{ user.username }} <a href="{% url 'logout' %}">logout</a> </p>
     {% endif %}
+
+
 
 {% block content %}
 {% endblock %}

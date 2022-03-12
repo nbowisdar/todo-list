@@ -19,9 +19,3 @@ class Task(models.Model):
     def get_absolute_url(self):
         return reverse('tasks')
 
-class Reset_password_code(models.Model):
-    code = models.CharField(max_length=100)
-    time = models.TimeField(auto_now=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='get_code')
-    # def get_absolute_url(self):
-    #     return reverse('profile', kwargs={'p_id':self.pk})
